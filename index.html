@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#1A0E0A" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#FBF8F5" media="(prefers-color-scheme: light)" />
+    <title>Roast & Route | Premier 3D Coffee Store Locator & Caffeine Intelligence</title>
+    
+    <!-- Primary SEO Meta Tags -->
+    <meta name="title" content="Roast & Route | Premier 3D Coffee Store Locator & Caffeine Intelligence" />
+    <meta name="description" content="Find the top artisanal roasteries, specialty third-wave cafes, and drive-thrus across North America. Real-time GPS distance, interactive 3D brew preview, personalized daily caffeine wellness guide, mobile ordering, and loyalty rewards." />
+    <meta name="keywords" content="coffee store locator, specialty coffee USA, cafe near me, third wave coffee, daily caffeine tracker, cortado, cold brew, artisan roasters, mobile order coffee" />
+    <meta name="author" content="Roast & Route North America" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Geo Meta Tags for North America / USA -->
+    <meta name="geo.region" content="US" />
+    <meta name="geo.position" content="37.7749;-122.4194" />
+    <meta name="ICBM" content="37.7749, -122.4194" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://roastandroute.coffee/" />
+    <meta property="og:title" content="Roast & Route | Find Your Perfect Coffee Nearby" />
+    <meta property="og:description" content="Discover nearby artisanal coffee shops, 3D interactive coffee experience, personalized caffeine tracking, and seamless mobile ordering." />
+    <meta property="og:image" content="/assets/og-coffee.webp" />
+
+    <!-- Twitter Card -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://roastandroute.coffee/" />
+    <meta property="twitter:title" content="Roast & Route | Coffee Discovery & Daily Caffeine Intelligence" />
+    <meta property="twitter:description" content="Locate top-rated coffee roasteries near you with real-time distance, personalized wellness intake recommendations, and instant curbside pickup." />
+
+    <!-- JSON-LD Structured Data for LocalBusiness and Generative Engine Optimization (GEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://roastandroute.coffee/#website",
+          "url": "https://roastandroute.coffee/",
+          "name": "Roast & Route",
+          "description": "Artisanal Coffee Shop Locator & Personalized Caffeine Tracking for North America",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://roastandroute.coffee/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "CoffeeShop",
+          "@id": "https://roastandroute.coffee/#service",
+          "name": "Roast & Route Specialty Coffee Network",
+          "servesCuisine": "Specialty Coffee, Artisanal Pastries, Cold Brew",
+          "priceRange": "$$",
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card, Apple Pay, Google Pay, Loyalty Points",
+          "areaServed": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Artisanal Brews",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "MenuItem",
+                  "name": "Brown Sugar Oat Cortado",
+                  "description": "Double ristretto over silky oat milk with organic dark brown sugar and Ceylon cinnamon"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "MenuItem",
+                  "name": "Kyoto-Style Cold Brew",
+                  "description": "18-hour slow drip single-origin Ethiopian Yirgacheffe with floral jasmine and bergamot notes"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/webp" href="/favicon.webp">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23C86D27'><path d='M2 21h18v-2H2M20 8h-2V5h2m0-2H4v10a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-3h2a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Z'/></svg>">
+  </head>
+  <body class="bg-coffee-50 text-coffee-950 dark:bg-[#120B08] dark:text-cream-100 antialiased selection:bg-roast-amber selection:text-white min-h-screen transition-colors duration-300">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "Roast & Route",
+  "description": "Premium 3D coffee locator, real-time store discovery, personalized daily caffeine recommendations, mobile ordering, and loyalty rewards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
