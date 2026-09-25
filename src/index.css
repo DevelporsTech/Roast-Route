@@ -6,6 +6,12 @@
   color-scheme: light dark;
 }
 
+/* Eliminate 300ms mobile touch delay for optimal INP (< 50ms) */
+html, body, button, a, select, input, [role="button"] {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Metric-compatible font fallbacks to eliminate Cumulative Layout Shift (CLS) */
 @font-face {
   font-family: 'Playfair Display Fallback';

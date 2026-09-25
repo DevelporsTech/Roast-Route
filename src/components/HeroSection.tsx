@@ -54,16 +54,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const [show3D, setShow3D] = useState(false);
   const [selectedFlavor, setSelectedFlavor] = useState<QuickFlavor>('latte');
 
-  // Progressive enhancement for desktop: defer 3D load until after initial paint & idle
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
-      const timer = setTimeout(() => {
-        setShow3D(true);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
   const currentFlavorData = FLAVOR_CREMA_COLORS[selectedFlavor];
 
   return (
