@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { CoffeeStore } from '../../types';
 import { Coordinates } from '../../services/locationService';
 import { US_METRO_HUBS } from '../../data/storesData';

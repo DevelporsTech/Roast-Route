@@ -30,10 +30,12 @@ import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { StoreLocator } from './components/StoreLocator/StoreLocator';
 import { DailyCaffeineCard } from './components/CaffeineTracker/DailyCaffeineCard';
-import { SeoGeoHub } from './components/SeoGeoHub';
 import { BottomNav } from './components/BottomNav';
 
-// Lazy Loaded Modals & Sub-views (Non-Critical Path)
+// Lazy Loaded Modals, Sub-views & Below-the-fold Sections (Non-Critical Path)
+const SeoGeoHub = lazy(() =>
+  import('./components/SeoGeoHub').then((m) => ({ default: m.SeoGeoHub }))
+);
 const StoreDetailModal = lazy(() =>
   import('./components/StoreLocator/StoreDetailModal').then((m) => ({ default: m.StoreDetailModal }))
 );
@@ -102,8 +104,13 @@ export function App() {
     });
   });
 
-  // Recalculate distance whenever user location changes
+  // Recalculate distance whenever user location changes (skipping initial mount)
+  const isInitialLocationMount = React.useRef(true);
   useEffect(() => {
+    if (isInitialLocationMount.current) {
+      isInitialLocationMount.current = false;
+      return;
+    }
     setStores((prev) =>
       prev.map((store) => {
         const dist = calculateDistanceMiles(userLocation, store.coordinates);
@@ -521,8 +528,14 @@ export function App() {
               onChangeView={(v) => setActiveView(v)}
             />
 
-            {/* SEO & GEO Citations Hub */}
-            <SeoGeoHub onSelectCity={handleSelectCity} />
+            {/* SEO & GEO Citations Hub (Deferred) */}
+            <Suspense fallback={
+              <div className="w-full py-8 text-center text-xs text-coffee-500">
+                <span className="text-xs font-semibold">Loading Roastery Directory...</span>
+              </div>
+            }>
+              <SeoGeoHub onSelectCity={handleSelectCity} />
+            </Suspense>
           </>
         )}
 

@@ -36,8 +36,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-        serif: ['Playfair Display', 'Georgia', 'serif'],
+        sans: ['Plus Jakarta Sans', 'Plus Jakarta Sans Fallback', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Playfair Display Fallback', 'Georgia', 'serif'],
       },
       animation: {
         'float': 'float 4s ease-in-out infinite',

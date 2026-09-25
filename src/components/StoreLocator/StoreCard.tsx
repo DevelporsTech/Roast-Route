@@ -17,12 +17,15 @@ export const StoreCard: React.FC<StoreCardProps> = ({
   onGetDirections,
 }) => {
   return (
-    <div className="group relative rounded-3xl bg-white dark:bg-[#1A100B] border border-coffee-200/80 dark:border-coffee-800/80 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between">
+    <div 
+      className="group relative rounded-3xl bg-white dark:bg-[#1A100B] border border-coffee-200/80 dark:border-coffee-800/80 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between"
+      style={{ contentVisibility: 'auto', containIntrinsicSize: '0 420px' }}
+    >
       <div>
         {/* Store Photo Hero with gradient overlay */}
         <div className="relative h-44 w-full overflow-hidden bg-coffee-200 dark:bg-coffee-900">
           <img
-            src={toWebp(store.image, 600, 75)}
+            src={toWebp(store.image, 400, 70)}
             alt={`Exterior view and atmosphere of ${store.name}`}
             width={400}
             height={176}

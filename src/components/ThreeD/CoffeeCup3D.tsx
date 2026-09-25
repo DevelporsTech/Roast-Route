@@ -256,7 +256,7 @@ export const CoffeeCup3D: React.FC<CoffeeCup3DProps> = ({ className = '' }) => {
     camera.lookAt(0, 0.65, 0);
 
     renderer.setSize(initialWidth, initialHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.35;
     renderer.shadowMap.enabled = true;
