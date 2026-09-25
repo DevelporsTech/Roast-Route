@@ -53,6 +53,7 @@ export const SeoGeoHub: React.FC<SeoGeoHubProps> = ({ onSelectCity }) => {
                   const el = document.getElementById('locator-section');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
+                aria-label={`Filter coffee roasteries in ${hub.name}`}
                 className="flex items-center gap-1.5 px-4 py-2 rounded-2xl bg-white dark:bg-coffee-950/80 border border-coffee-200/80 dark:border-coffee-800 hover:border-roast-amber text-coffee-800 dark:text-cream-200 font-bold text-xs shadow-sm hover:scale-105 active:scale-95 transition-all min-h-[40px]"
               >
                 <MapPin className="w-3.5 h-3.5 text-roast-caramel" />
@@ -68,9 +69,9 @@ export const SeoGeoHub: React.FC<SeoGeoHubProps> = ({ onSelectCity }) => {
             <span className="text-xs font-bold uppercase tracking-wider text-roast-caramel dark:text-roast-amber">
               Specialty Coffee Knowledge &amp; FAQs
             </span>
-            <h3 className="text-xl sm:text-2xl font-serif font-bold text-coffee-950 dark:text-cream-50">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-coffee-950 dark:text-cream-50">
               Frequently Asked Questions
-            </h3>
+            </h2>
           </div>
 
           <div className="space-y-3">
@@ -82,8 +83,11 @@ export const SeoGeoHub: React.FC<SeoGeoHubProps> = ({ onSelectCity }) => {
                   className="rounded-2xl bg-white dark:bg-coffee-950/70 border border-coffee-200/80 dark:border-coffee-800 overflow-hidden shadow-sm"
                 >
                   <button
+                    id={`faq-question-${idx}`}
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-answer-${idx}`}
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full p-4 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-bold text-coffee-950 dark:text-cream-100"
+                    className="w-full p-4 text-left flex items-center justify-between gap-3 text-xs sm:text-sm font-bold text-coffee-950 dark:text-cream-100 min-h-[44px]"
                   >
                     <span>{faq.q}</span>
                     {isOpen ? (
@@ -94,7 +98,12 @@ export const SeoGeoHub: React.FC<SeoGeoHubProps> = ({ onSelectCity }) => {
                   </button>
 
                   {isOpen && (
-                    <div className="p-4 pt-0 text-xs text-coffee-600 dark:text-coffee-300 leading-relaxed border-t border-coffee-100 dark:border-coffee-800/60 mt-1">
+                    <div
+                      id={`faq-answer-${idx}`}
+                      role="region"
+                      aria-labelledby={`faq-question-${idx}`}
+                      className="p-4 pt-0 text-xs text-coffee-600 dark:text-coffee-300 leading-relaxed border-t border-coffee-100 dark:border-coffee-800/60 mt-1"
+                    >
                       {faq.a}
                     </div>
                   )}

@@ -106,9 +106,9 @@ export const DailyCaffeineCard: React.FC<DailyCaffeineCardProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h3 className="font-serif font-bold text-lg sm:text-xl text-cream-50 leading-tight">
+                <h2 className="font-serif font-bold text-lg sm:text-xl text-cream-50 leading-tight">
                   Personalized Caffeine Intake
-                </h3>
+                </h2>
                 {isTeen && (
                   <span className="px-2.5 py-0.5 rounded-full bg-purple-500/20 border border-purple-400/40 text-purple-200 text-[11px] font-extrabold tracking-wide uppercase">
                     Adolescent Safe Mode
@@ -126,6 +126,7 @@ export const DailyCaffeineCard: React.FC<DailyCaffeineCardProps> = ({
           <div className="flex items-center gap-2 self-end sm:self-auto">
             <button
               onClick={() => setShowTeenGuide(!showTeenGuide)}
+              aria-label="Learn about teen and adolescent caffeine safety"
               className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-cream-100 text-xs font-semibold flex items-center gap-1.5 transition-colors border border-white/5"
               title="Learn about teen & adolescent caffeine safety"
             >
@@ -181,9 +182,9 @@ export const DailyCaffeineCard: React.FC<DailyCaffeineCardProps> = ({
               <div className="flex items-center gap-2">
                 <span className="text-xl">🧒</span>
                 <div>
-                  <h4 className="font-bold text-xs sm:text-sm text-purple-100">
+                  <h3 className="font-bold text-xs sm:text-sm text-purple-100">
                     Understanding Adolescent Caffeine Pacing (Ages 12–17)
-                  </h4>
+                  </h3>
                   <p className="text-[11px] text-purple-200/80">
                     Clinical standards backed by the American Academy of Pediatrics (AAP) &amp; FDA
                   </p>
@@ -302,9 +303,9 @@ export const DailyCaffeineCard: React.FC<DailyCaffeineCardProps> = ({
           </div>
 
           <div>
-            <h4 className="font-serif font-bold text-base text-cream-50">
+            <h3 className="font-serif font-bold text-base text-cream-50">
               {recommendation.drinkName}
-            </h4>
+            </h3>
             <span className="text-[11px] text-roast-amber/90 font-medium block">
               Serving: {recommendation.servingSize}
             </span>
@@ -366,6 +367,7 @@ export const DailyCaffeineCard: React.FC<DailyCaffeineCardProps> = ({
               <button
                 key={item.name}
                 onClick={() => onQuickLog(item.name, item.mg)}
+                aria-label={`Log ${item.name} with ${item.mg} milligrams of caffeine`}
                 className={`p-2.5 rounded-xl text-left transition-all border flex flex-col justify-between active:scale-95 ${
                   isTeen && !item.safeForTeen
                     ? 'bg-rose-950/30 border-rose-500/30 text-cream-200/70 hover:bg-rose-900/40'

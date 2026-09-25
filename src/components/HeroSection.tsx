@@ -1,6 +1,9 @@
-import React from 'react';
-import { CoffeeCup3D } from './ThreeD/CoffeeCup3D';
-import { Navigation, MapPin } from 'lucide-react';
+import React, { Suspense, lazy } from 'react';
+import { Navigation, MapPin, Coffee, Loader2 } from 'lucide-react';
+
+const CoffeeCup3D = lazy(() =>
+  import('./ThreeD/CoffeeCup3D').then((m) => ({ default: m.CoffeeCup3D }))
+);
 
 interface HeroSectionProps {
   onFindNearby: () => void;
@@ -40,7 +43,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </h1>
 
             {/* Sub-headline */}
-            <p className="text-base sm:text-lg text-coffee-700 dark:text-coffee-300/90 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-base sm:text-lg text-coffee-700 dark:text-coffee-300 max-w-xl mx-auto lg:mx-0 leading-relaxed">
               Explore North America’s top independent coffee roasters. Real-time distance tracking, customized caffeine intake pacing, and contactless 1-tap mobile ordering.
             </p>
 
@@ -48,6 +51,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 pt-2">
               <button
                 onClick={onFindNearby}
+                aria-label="Find specialty coffee roasters near current location"
                 className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-7 py-4 rounded-2xl bg-coffee-900 dark:bg-roast-amber hover:opacity-95 text-white dark:text-coffee-950 font-bold text-sm shadow-xl shadow-coffee-950/15 active:scale-98 transition-all min-h-[52px]"
               >
                 <Navigation className="w-4 h-4 fill-current" />
@@ -56,6 +60,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
               <button
                 onClick={onExploreMap}
+                aria-label="Open interactive roastery map"
                 className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-white/80 dark:bg-coffee-950/70 hover:bg-coffee-100 dark:hover:bg-coffee-900 border border-coffee-200/80 dark:border-coffee-800 text-coffee-900 dark:text-cream-100 font-bold text-sm shadow-sm active:scale-98 transition-all min-h-[52px]"
               >
                 <MapPin className="w-4 h-4 text-roast-caramel" />
@@ -69,7 +74,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <span className="font-extrabold text-base text-coffee-950 dark:text-cream-50 block font-mono">
                   4.8★
                 </span>
-                <span className="text-[11px] text-coffee-500 dark:text-coffee-400 block">
+                <span className="text-[11px] text-coffee-600 dark:text-coffee-300 font-medium block">
                   Average shop rating
                 </span>
               </div>
@@ -77,7 +82,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <span className="font-extrabold text-base text-coffee-950 dark:text-cream-50 block font-mono">
                   &lt; 0.5 mi
                 </span>
-                <span className="text-[11px] text-coffee-500 dark:text-coffee-400 block">
+                <span className="text-[11px] text-coffee-600 dark:text-coffee-300 font-medium block">
                   Typical walking radius
                 </span>
               </div>
@@ -85,17 +90,31 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                 <span className="font-extrabold text-base text-coffee-950 dark:text-cream-50 block font-mono">
                   100%
                 </span>
-                <span className="text-[11px] text-coffee-500 dark:text-coffee-400 block">
+                <span className="text-[11px] text-coffee-600 dark:text-coffee-300 font-medium block">
                   Ethical direct trade
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Three.js Interactive 3D Canvas */}
+          {/* Right Column: Three.js Interactive 3D Canvas (Code-split with fallback) */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
-            <div className="w-full max-w-md p-2 rounded-3xl bg-white/40 dark:bg-coffee-950/40 backdrop-blur-xl border border-coffee-200/60 dark:border-coffee-800/60 shadow-xl">
-              <CoffeeCup3D />
+            <div className="w-full max-w-md p-2 rounded-3xl bg-white/40 dark:bg-coffee-950/40 backdrop-blur-xl border border-coffee-200/60 dark:border-coffee-800/60 shadow-xl min-h-[380px] flex items-center justify-center">
+              <Suspense
+                fallback={
+                  <div className="w-full h-[380px] rounded-2xl bg-coffee-100/50 dark:bg-coffee-900/50 flex flex-col items-center justify-center gap-3 text-coffee-600 dark:text-coffee-300">
+                    <div className="w-16 h-16 rounded-full bg-roast-amber/20 flex items-center justify-center animate-pulse">
+                      <Coffee className="w-8 h-8 text-roast-amber animate-bounce" />
+                    </div>
+                    <div className="flex items-center gap-2 text-xs font-semibold">
+                      <Loader2 className="w-3.5 h-3.5 animate-spin text-roast-amber" />
+                      <span>Loading 3D Brew Canvas...</span>
+                    </div>
+                  </div>
+                }
+              >
+                <CoffeeCup3D />
+              </Suspense>
             </div>
           </div>
         </div>

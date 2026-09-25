@@ -3,6 +3,7 @@ import L from 'leaflet';
 import { CoffeeStore } from '../../types';
 import { Coordinates } from '../../services/locationService';
 import { US_METRO_HUBS } from '../../data/storesData';
+import { toWebp } from '../../utils/imageOptimizer';
 import {
   MapPin,
   Navigation,
@@ -466,8 +467,12 @@ export const StoreMapView: React.FC<StoreMapViewProps> = ({
               <div className="flex items-start gap-3">
                 {activePin.image && (
                   <img
-                    src={activePin.image}
-                    alt={activePin.name}
+                    src={toWebp(activePin.image, 160, 75)}
+                    alt={`Storefront of ${activePin.name}`}
+                    width={64}
+                    height={64}
+                    loading="lazy"
+                    decoding="async"
                     className="w-16 h-16 rounded-2xl object-cover border border-coffee-200/60 dark:border-coffee-700 shadow-sm shrink-0"
                   />
                 )}

@@ -93,6 +93,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-1 px-2">
             <MapPin className="w-3.5 h-3.5 text-roast-caramel" />
             <select
+              id="desktop-metro-select"
+              aria-label="Select Metro City Hub"
               value={selectedCity}
               onChange={(e) => onSelectCity(e.target.value)}
               className="bg-transparent font-semibold text-coffee-900 dark:text-cream-100 focus:outline-none cursor-pointer text-xs"
@@ -111,6 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Dark / Light Mode Toggle */}
           <button
             onClick={onToggleDarkMode}
+            aria-label={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             className="w-10 h-10 rounded-2xl bg-white/80 dark:bg-coffee-950/70 border border-coffee-200/80 dark:border-coffee-800 text-coffee-700 dark:text-cream-200 flex items-center justify-center hover:bg-coffee-100 dark:hover:bg-coffee-900 transition-colors shadow-sm"
             title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           >
@@ -127,6 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 el?.scrollIntoView({ behavior: 'smooth' });
               }
             }}
+            aria-label="Explore Interactive Roasteries Map"
             className="hidden md:flex items-center justify-center gap-1.5 px-3 py-2 rounded-2xl bg-white/80 dark:bg-coffee-950/70 border border-coffee-200/80 dark:border-coffee-800 text-coffee-800 dark:text-cream-100 hover:bg-coffee-100 dark:hover:bg-coffee-900 transition-colors shadow-sm min-h-[40px]"
             title="Explore Interactive Roasteries Map"
           >
@@ -138,6 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {onOpenOrders && (
             <button
               onClick={onOpenOrders}
+              aria-label="View Past Coffee Orders & Receipts"
               className="relative hidden sm:flex items-center justify-center gap-2 px-3.5 py-2 rounded-2xl bg-white/80 dark:bg-coffee-950/70 border border-coffee-200/80 dark:border-coffee-800 text-coffee-800 dark:text-cream-100 hover:bg-coffee-100 dark:hover:bg-coffee-900 transition-colors shadow-sm min-h-[40px]"
               title="View Past Coffee Orders & Receipts"
             >
@@ -154,6 +159,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Cart Icon & Badge */}
           <button
             onClick={onOpenCart}
+            aria-label="Open Order Cart"
             className="relative w-10 h-10 sm:w-auto sm:px-3.5 sm:py-2 rounded-2xl bg-white/80 dark:bg-coffee-950/70 border border-coffee-200/80 dark:border-coffee-800 text-coffee-800 dark:text-cream-100 flex items-center justify-center gap-2 hover:bg-coffee-100 dark:hover:bg-coffee-900 transition-colors shadow-sm min-h-[40px]"
             title="Open Order Cart"
           >
@@ -169,6 +175,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* User Profile / Rewards Pill */}
           <button
             onClick={onOpenAuth}
+            aria-label={user.isLoggedIn ? `Member loyalty profile for ${user.name}` : 'Sign in to account'}
             className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-coffee-900 dark:bg-roast-amber hover:opacity-90 text-white dark:text-coffee-950 text-xs font-bold shadow-md transition-all min-h-[40px]"
           >
             {user.isLoggedIn ? (
@@ -195,6 +202,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       <div className="lg:hidden flex items-center justify-between gap-2 px-4 py-1.5 bg-coffee-100/70 dark:bg-coffee-950/90 border-t border-coffee-200/50 dark:border-coffee-800/60 text-xs">
         <button
           onClick={onDetectGps}
+          aria-label="Calibrate GPS location"
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl font-bold transition-all min-h-[32px] ${
             isGpsActive
               ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/60 dark:text-blue-200'
@@ -208,6 +216,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center gap-1.5 px-2 py-1 rounded-xl bg-white/80 dark:bg-coffee-900/80 border border-coffee-200 dark:border-coffee-700">
           <MapPin className="w-3 h-3 text-roast-caramel shrink-0" />
           <select
+            id="mobile-metro-select"
+            aria-label="Select Metro City Hub"
             value={selectedCity}
             onChange={(e) => onSelectCity(e.target.value)}
             className="bg-transparent font-bold text-coffee-900 dark:text-cream-100 focus:outline-none cursor-pointer text-[11px] pr-1"

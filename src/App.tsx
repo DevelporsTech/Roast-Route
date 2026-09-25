@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, lazy, Suspense } from 'react';
 import {
   CoffeeStore,
   MenuItem,
@@ -25,21 +25,39 @@ import {
   requestNotificationPermission
 } from './services/notificationService';
 
-// Components
+// Primary Components (Critical Path)
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
 import { StoreLocator } from './components/StoreLocator/StoreLocator';
-import { StoreDetailModal } from './components/StoreLocator/StoreDetailModal';
-import { DrinkCustomizerModal } from './components/Ordering/DrinkCustomizerModal';
-import { CartDrawer } from './components/Ordering/CartDrawer';
-import { OrderTrackerModal } from './components/Ordering/OrderTrackerModal';
 import { DailyCaffeineCard } from './components/CaffeineTracker/DailyCaffeineCard';
-import { CaffeineModal } from './components/CaffeineTracker/CaffeineModal';
-import { AuthModal } from './components/Auth/AuthModal';
 import { SeoGeoHub } from './components/SeoGeoHub';
 import { BottomNav } from './components/BottomNav';
-import { OrdersView } from './components/Orders/OrdersView';
-import { BaristaKdsModal } from './components/Orders/BaristaKdsModal';
+
+// Lazy Loaded Modals & Sub-views (Non-Critical Path)
+const StoreDetailModal = lazy(() =>
+  import('./components/StoreLocator/StoreDetailModal').then((m) => ({ default: m.StoreDetailModal }))
+);
+const DrinkCustomizerModal = lazy(() =>
+  import('./components/Ordering/DrinkCustomizerModal').then((m) => ({ default: m.DrinkCustomizerModal }))
+);
+const CartDrawer = lazy(() =>
+  import('./components/Ordering/CartDrawer').then((m) => ({ default: m.CartDrawer }))
+);
+const OrderTrackerModal = lazy(() =>
+  import('./components/Ordering/OrderTrackerModal').then((m) => ({ default: m.OrderTrackerModal }))
+);
+const CaffeineModal = lazy(() =>
+  import('./components/CaffeineTracker/CaffeineModal').then((m) => ({ default: m.CaffeineModal }))
+);
+const AuthModal = lazy(() =>
+  import('./components/Auth/AuthModal').then((m) => ({ default: m.AuthModal }))
+);
+const OrdersView = lazy(() =>
+  import('./components/Orders/OrdersView').then((m) => ({ default: m.OrdersView }))
+);
+const BaristaKdsModal = lazy(() =>
+  import('./components/Orders/BaristaKdsModal').then((m) => ({ default: m.BaristaKdsModal }))
+);
 import { CheckCircle2, Bell, Sparkles } from 'lucide-react';
 
 export function App() {
@@ -539,18 +557,20 @@ export function App() {
 
         {mobileTab === 'orders' && (
           <div className="pt-4">
-            <OrdersView
-              orders={orders}
-              stores={stores}
-              onReorder={handleReorder}
-              onTrackOrder={handleTrackOrder}
-              onExploreShops={() => setMobileTab('stores')}
-              onOpenLoyalty={() => {
-                setAuthModalTab('loyalty');
-                setIsAuthOpen(true);
-              }}
-              onOpenBaristaKds={() => setIsBaristaKdsOpen(true)}
-            />
+            <Suspense fallback={<div className="p-8 text-center text-xs font-semibold text-coffee-600 dark:text-coffee-400">Loading Orders...</div>}>
+              <OrdersView
+                orders={orders}
+                stores={stores}
+                onReorder={handleReorder}
+                onTrackOrder={handleTrackOrder}
+                onExploreShops={() => setMobileTab('stores')}
+                onOpenLoyalty={() => {
+                  setAuthModalTab('loyalty');
+                  setIsAuthOpen(true);
+                }}
+                onOpenBaristaKds={() => setIsBaristaKdsOpen(true)}
+              />
+            </Suspense>
           </div>
         )}
 
@@ -633,70 +653,86 @@ export function App() {
         ordersCount={orders.length}
       />
 
-      {/* Modals */}
-      <StoreDetailModal
-        store={selectedStore}
-        onClose={() => setSelectedStore(null)}
-        onSelectMenuItem={(item, store) => setCustomizingItem({ item, store })}
-        onToggleFavorite={handleToggleFavorite}
-        onGetDirections={handleGetDirections}
-      />
+      {/* Modals wrapped in Suspense for code splitting */}
+      <Suspense fallback={null}>
+        {selectedStore && (
+          <StoreDetailModal
+            store={selectedStore}
+            onClose={() => setSelectedStore(null)}
+            onSelectMenuItem={(item, store) => setCustomizingItem({ item, store })}
+            onToggleFavorite={handleToggleFavorite}
+            onGetDirections={handleGetDirections}
+          />
+        )}
 
-      <DrinkCustomizerModal
-        item={customizingItem?.item || null}
-        store={customizingItem?.store || null}
-        onClose={() => setCustomizingItem(null)}
-        onAddToCart={handleAddToCart}
-      />
+        {customizingItem && (
+          <DrinkCustomizerModal
+            item={customizingItem.item}
+            store={customizingItem.store}
+            onClose={() => setCustomizingItem(null)}
+            onAddToCart={handleAddToCart}
+          />
+        )}
 
-      <CartDrawer
-        isOpen={isCartOpen}
-        items={cartItems}
-        stores={stores}
-        onClose={() => setIsCartOpen(false)}
-        onRemoveItem={handleRemoveFromCart}
-        onUpdateQuantity={handleUpdateQuantity}
-        onOrderPlaced={handleOrderPlaced}
-        userPoints={user.loyaltyPoints}
-      />
+        {isCartOpen && (
+          <CartDrawer
+            isOpen={isCartOpen}
+            items={cartItems}
+            stores={stores}
+            onClose={() => setIsCartOpen(false)}
+            onRemoveItem={handleRemoveFromCart}
+            onUpdateQuantity={handleUpdateQuantity}
+            onOrderPlaced={handleOrderPlaced}
+            userPoints={user.loyaltyPoints}
+          />
+        )}
 
-      <OrderTrackerModal
-        order={activeTrackingOrder}
-        onClose={() => setActiveTrackingOrder(null)}
-        onSendNotification={handleTriggerNotification}
-      />
+        {activeTrackingOrder && (
+          <OrderTrackerModal
+            order={activeTrackingOrder}
+            onClose={() => setActiveTrackingOrder(null)}
+            onSendNotification={handleTriggerNotification}
+          />
+        )}
 
-      <BaristaKdsModal
-        isOpen={isBaristaKdsOpen}
-        onClose={() => setIsBaristaKdsOpen(false)}
-        orders={orders}
-        stores={stores}
-        onUpdateOrderStatus={handleUpdateOrderStatus}
-      />
+        {isBaristaKdsOpen && (
+          <BaristaKdsModal
+            isOpen={isBaristaKdsOpen}
+            onClose={() => setIsBaristaKdsOpen(false)}
+            orders={orders}
+            stores={stores}
+            onUpdateOrderStatus={handleUpdateOrderStatus}
+          />
+        )}
 
-      <CaffeineModal
-        isOpen={isCaffeineModalOpen}
-        onClose={() => setIsCaffeineModalOpen(false)}
-        logs={caffeineLogs}
-        preferences={caffeinePreferences}
-        recommendation={recommendation}
-        onAddLog={(name, mg) => handleQuickLog(name, mg)}
-        onRemoveLog={(id) => setCaffeineLogs((p) => p.filter((l) => l.id !== id))}
-        onUpdatePreferences={(newP) => setCaffeinePreferences((p) => ({ ...p, ...newP }))}
-      />
+        {isCaffeineModalOpen && (
+          <CaffeineModal
+            isOpen={isCaffeineModalOpen}
+            onClose={() => setIsCaffeineModalOpen(false)}
+            logs={caffeineLogs}
+            preferences={caffeinePreferences}
+            recommendation={recommendation}
+            onAddLog={(name, mg) => handleQuickLog(name, mg)}
+            onRemoveLog={(id) => setCaffeineLogs((p) => p.filter((l) => l.id !== id))}
+            onUpdatePreferences={(newP) => setCaffeinePreferences((p) => ({ ...p, ...newP }))}
+          />
+        )}
 
-      <AuthModal
-        isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-        user={user}
-        orders={orders}
-        stores={stores}
-        onLogin={handleLogin}
-        onLogout={handleLogout}
-        initialTab={authModalTab}
-        onReorder={handleReorder}
-        onTrackOrder={handleTrackOrder}
-      />
+        {isAuthOpen && (
+          <AuthModal
+            isOpen={isAuthOpen}
+            onClose={() => setIsAuthOpen(false)}
+            user={user}
+            orders={orders}
+            stores={stores}
+            onLogin={handleLogin}
+            onLogout={handleLogout}
+            initialTab={authModalTab}
+            onReorder={handleReorder}
+            onTrackOrder={handleTrackOrder}
+          />
+        )}
+      </Suspense>
     </div>
   );
 }

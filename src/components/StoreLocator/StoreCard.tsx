@@ -23,7 +23,9 @@ export const StoreCard: React.FC<StoreCardProps> = ({
         <div className="relative h-44 w-full overflow-hidden bg-coffee-200 dark:bg-coffee-900">
           <img
             src={toWebp(store.image, 600, 75)}
-            alt={store.name}
+            alt={`Exterior view and atmosphere of ${store.name}`}
+            width={400}
+            height={176}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
             decoding="async"
@@ -47,7 +49,8 @@ export const StoreCard: React.FC<StoreCardProps> = ({
                 e.stopPropagation();
                 onToggleFavorite(store.id);
               }}
-              className="w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:text-rose-400 hover:scale-110 active:scale-95 transition-all shadow-md"
+              aria-label={store.isFavorite ? `Remove ${store.name} from saved favorites` : `Save ${store.name} to favorites`}
+              className="w-11 h-11 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:text-rose-400 hover:scale-110 active:scale-95 transition-all shadow-md min-w-[44px] min-h-[44px]"
               title={store.isFavorite ? 'Remove from favorites' : 'Save store to favorites'}
             >
               <Heart
@@ -124,6 +127,7 @@ export const StoreCard: React.FC<StoreCardProps> = ({
       <div className="p-4 pt-0 grid grid-cols-2 gap-2 mt-2">
         <button
           onClick={() => onGetDirections(store)}
+          aria-label={`Get directions to ${store.name}`}
           className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl bg-coffee-100 dark:bg-coffee-900/80 hover:bg-coffee-200 dark:hover:bg-coffee-800 text-coffee-900 dark:text-cream-100 font-bold text-xs transition-colors min-h-[44px]"
         >
           <Navigation className="w-3.5 h-3.5 text-roast-amber" />
@@ -132,6 +136,7 @@ export const StoreCard: React.FC<StoreCardProps> = ({
 
         <button
           onClick={() => onSelect(store)}
+          aria-label={`View menu and order from ${store.name}`}
           className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-2xl bg-coffee-900 dark:bg-roast-amber hover:bg-coffee-800 dark:hover:bg-roast-caramel text-white dark:text-coffee-950 font-bold text-xs transition-all shadow-sm active:scale-98 min-h-[44px]"
         >
           <span>Order Menu</span>

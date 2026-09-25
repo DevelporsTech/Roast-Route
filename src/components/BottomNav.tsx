@@ -43,6 +43,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
             <button
               key={item.id}
               onClick={() => onChangeTab(item.id)}
+              aria-label={item.label}
               className={`relative flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all min-h-[48px] ${
                 isActive
                   ? 'text-roast-amber dark:text-roast-amber font-bold scale-105'
@@ -66,6 +67,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
         {totalCart > 0 && (
           <button
             onClick={onOpenCart}
+            aria-label={`Open Cart with ${totalCart} items`}
             className="flex flex-col items-center justify-center py-1 px-2.5 rounded-xl text-roast-caramel font-bold min-h-[48px] relative"
           >
             <div className="relative">

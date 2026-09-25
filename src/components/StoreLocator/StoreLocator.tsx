@@ -1,8 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, lazy, Suspense } from 'react';
 import { CoffeeStore, FilterState } from '../../types';
 import { Coordinates } from '../../services/locationService';
 import { StoreCard } from './StoreCard';
-import { StoreMapView } from './StoreMapView';
 import { POPULAR_AMENITIES } from '../../data/storesData';
 import {
   Search,
@@ -14,8 +13,13 @@ import {
   Star,
   Check,
   RotateCcw,
-  Sparkles
+  Sparkles,
+  Loader2
 } from 'lucide-react';
+
+const StoreMapView = lazy(() =>
+  import('./StoreMapView').then((m) => ({ default: m.StoreMapView }))
+);
 
 interface StoreLocatorProps {
   stores: CoffeeStore[];
@@ -146,6 +150,7 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
           <div className="flex items-center gap-1 p-1 rounded-2xl bg-white dark:bg-coffee-950/80 border border-coffee-200/80 dark:border-coffee-800 shadow-sm self-start md:self-auto">
             <button
               onClick={() => onChangeView('list')}
+              aria-label="Switch to Card List view"
               className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all min-h-[38px] ${
                 activeView === 'list'
                   ? 'bg-coffee-900 dark:bg-roast-amber text-white dark:text-coffee-950 shadow-sm'
@@ -158,6 +163,7 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
 
             <button
               onClick={() => onChangeView('map')}
+              aria-label="Switch to Interactive Map view"
               className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all min-h-[38px] ${
                 activeView === 'map'
                   ? 'bg-coffee-900 dark:bg-roast-amber text-white dark:text-coffee-950 shadow-sm'
@@ -176,7 +182,9 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
           <div className="relative">
             <Search className="w-4 h-4 text-coffee-400 absolute left-4 top-3.5" />
             <input
+              id="store-search-input"
               type="text"
+              aria-label="Search coffee shops by name, neighborhood, city, or ZIP code"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search by shop name, neighborhood, city, or ZIP code (e.g. Ritual, 94110, Brooklyn)..."
@@ -185,7 +193,8 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="absolute right-3.5 top-3 text-xs text-coffee-400 hover:text-coffee-700"
+                aria-label="Clear search input"
+                className="absolute right-3.5 top-3 text-xs text-coffee-400 hover:text-coffee-700 p-1"
               >
                 Clear
               </button>
@@ -199,6 +208,7 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
               {/* Open Now Chip */}
               <button
                 onClick={() => setOpenNowOnly(!openNowOnly)}
+                aria-label="Filter stores open now"
                 className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all min-h-[34px] ${
                   openNowOnly
                     ? 'bg-emerald-600 text-white shadow-sm'
@@ -212,6 +222,7 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
               {/* 4.8+ Rating Chip */}
               <button
                 onClick={() => setMinRating(minRating === 4.8 ? 0 : 4.8)}
+                aria-label="Filter stores with 4.8 or higher rating"
                 className={`px-3 py-1.5 rounded-xl font-bold flex items-center gap-1.5 transition-all min-h-[34px] ${
                   minRating === 4.8
                     ? 'bg-amber-500 text-white shadow-sm'
@@ -226,17 +237,19 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
               <div className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-coffee-100/80 dark:bg-coffee-900/70 text-coffee-800 dark:text-coffee-200 font-semibold min-h-[34px]">
                 <MapPin className="w-3.5 h-3.5 text-roast-amber" />
                 <select
+                  id="distance-radius-select"
+                  aria-label="Filter stores by maximum distance"
                   value={maxRadiusMiles}
                   onChange={(e) => setMaxRadiusMiles(Number(e.target.value))}
-                  className="bg-transparent focus:outline-none cursor-pointer text-xs font-bold"
+                  className="bg-transparent focus:outline-none cursor-pointer text-xs font-bold text-coffee-900 dark:text-cream-100"
                 >
-                  <option value={1}>Within 1 mile</option>
-                  <option value={3}>Within 3 miles</option>
-                  <option value={5}>Within 5 miles</option>
-                  <option value={10}>Within 10 miles</option>
-                  <option value={25}>Within 25 miles</option>
-                  <option value={100}>Within 100 miles</option>
-                  <option value={5000}>All USA (Nationwide)</option>
+                  <option value={1} className="dark:bg-coffee-950">Within 1 mile</option>
+                  <option value={3} className="dark:bg-coffee-950">Within 3 miles</option>
+                  <option value={5} className="dark:bg-coffee-950">Within 5 miles</option>
+                  <option value={10} className="dark:bg-coffee-950">Within 10 miles</option>
+                  <option value={25} className="dark:bg-coffee-950">Within 25 miles</option>
+                  <option value={100} className="dark:bg-coffee-950">Within 100 miles</option>
+                  <option value={5000} className="dark:bg-coffee-950">All USA (Nationwide)</option>
                 </select>
               </div>
 
@@ -244,6 +257,7 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
               {hasActiveFilters && (
                 <button
                   onClick={resetFilters}
+                  aria-label="Reset all search filters"
                   className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold transition-colors"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
@@ -254,22 +268,24 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
 
             {/* Right side Sort Dropdown */}
             <div className="flex items-center gap-1.5 font-semibold text-coffee-700 dark:text-coffee-300">
-              <span className="text-coffee-400 text-[11px]">Sort:</span>
+              <span className="text-coffee-500 dark:text-coffee-400 text-[11px]">Sort:</span>
               <select
+                id="sort-by-select"
+                aria-label="Sort coffee shops"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
                 className="px-2.5 py-1.5 rounded-xl bg-coffee-100/80 dark:bg-coffee-900/70 text-coffee-900 dark:text-cream-100 font-bold focus:outline-none cursor-pointer"
               >
-                <option value="distance">Nearest Distance</option>
-                <option value="rating">Highest Rated</option>
-                <option value="popular">Most Reviewed</option>
+                <option value="distance" className="dark:bg-coffee-950">Nearest Distance</option>
+                <option value="rating" className="dark:bg-coffee-950">Highest Rated</option>
+                <option value="popular" className="dark:bg-coffee-950">Most Reviewed</option>
               </select>
             </div>
           </div>
 
           {/* Popular Amenities Filter Chips */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none pt-1">
-            <span className="text-[11px] font-bold text-coffee-400 uppercase tracking-wider shrink-0 mr-1">
+            <span className="text-[11px] font-bold text-coffee-500 dark:text-coffee-400 uppercase tracking-wider shrink-0 mr-1">
               Amenities:
             </span>
             {POPULAR_AMENITIES.map((amenity) => {
@@ -278,6 +294,7 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
                 <button
                   key={amenity}
                   onClick={() => toggleAmenity(amenity)}
+                  aria-label={`Filter by ${amenity}`}
                   className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1 min-h-[32px] ${
                     isSelected
                       ? 'bg-roast-caramel text-white shadow-sm font-bold'
@@ -294,17 +311,28 @@ export const StoreLocator: React.FC<StoreLocatorProps> = ({
 
         {/* Content Display: List View or Map View */}
         {activeView === 'map' ? (
-          <StoreMapView
-            stores={filteredStores}
-            allStores={stores}
-            userLocation={userLocation}
-            selectedStore={selectedPinStore}
-            onSelectStore={(s) => {
-              setSelectedPinStore(s);
-            }}
-            onOpenStoreDetails={(s) => onSelectStore(s)}
-            onGetDirections={onGetDirections}
-          />
+          <Suspense
+            fallback={
+              <div className="w-full h-[600px] rounded-3xl bg-coffee-100 dark:bg-coffee-950/80 border border-coffee-200 dark:border-coffee-800 flex flex-col items-center justify-center gap-3">
+                <Loader2 className="w-8 h-8 animate-spin text-roast-amber" />
+                <span className="text-xs font-bold text-coffee-700 dark:text-coffee-300">
+                  Loading Interactive Roastery Map...
+                </span>
+              </div>
+            }
+          >
+            <StoreMapView
+              stores={filteredStores}
+              allStores={stores}
+              userLocation={userLocation}
+              selectedStore={selectedPinStore}
+              onSelectStore={(s) => {
+                setSelectedPinStore(s);
+              }}
+              onOpenStoreDetails={(s) => onSelectStore(s)}
+              onGetDirections={onGetDirections}
+            />
+          </Suspense>
         ) : (
           <div>
             {filteredStores.length === 0 ? (
